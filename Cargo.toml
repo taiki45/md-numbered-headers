@@ -1,0 +1,7 @@
+[package]
+name = "md-numbered-headers"
+version = "0.1.0"
+authors = ["Taiki Ono <m@taiki.dev>"]
+edition = "2018"
+
+[dependencies]
