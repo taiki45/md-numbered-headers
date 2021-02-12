@@ -1,5 +1,12 @@
 use md_numbered_headers::*;
 
+const DEFAULT_OPT: Opt = Opt {
+    cleanup_only: false,
+    start_depth: 2,
+    end_depth: 6,
+    reset_with_higher_depth: false,
+};
+
 #[test]
 fn test_increment_only() {
     let basic_md = "
@@ -9,7 +16,7 @@ fn test_increment_only() {
 "
     .to_string();
 
-    let out = process(&basic_md);
+    let out = process(&basic_md, DEFAULT_OPT);
     assert_eq!(
         out,
         "
@@ -31,7 +38,7 @@ fn test_increment_with_reset() {
 "
     .to_string();
 
-    let out = process(&basic_md);
+    let out = process(&basic_md, DEFAULT_OPT);
     assert_eq!(
         out,
         "
@@ -55,7 +62,7 @@ fn test_with_heading1() {
 "
     .to_string();
 
-    let out = process(&basic_md);
+    let out = process(&basic_md, DEFAULT_OPT);
     assert_eq!(
         out,
         "
@@ -79,7 +86,7 @@ fn test_depth5() {
 "
     .to_string();
 
-    let out = process(&basic_md);
+    let out = process(&basic_md, DEFAULT_OPT);
     assert_eq!(
         out,
         "
@@ -101,7 +108,7 @@ fn test_non_incremental() {
 "
     .to_string();
 
-    let out = process(&basic_md);
+    let out = process(&basic_md, DEFAULT_OPT);
     assert_eq!(
         out,
         "
@@ -121,7 +128,7 @@ fn test_existing_numbers() {
 "
     .to_string();
 
-    let out = process(&basic_md);
+    let out = process(&basic_md, DEFAULT_OPT);
     assert_eq!(
         out,
         "
@@ -144,7 +151,7 @@ fn test_last_newline() {
 "
     .to_string();
 
-    let out = process(&process(&basic_md));
+    let out = process(&process(&basic_md, DEFAULT_OPT), DEFAULT_OPT);
     assert_eq!(
         out,
         "
@@ -170,7 +177,7 @@ $ echo
 "
     .to_string();
 
-    let out = process(&process(&basic_md));
+    let out = process(&process(&basic_md, DEFAULT_OPT), DEFAULT_OPT);
     assert_eq!(
         out,
         "
@@ -196,7 +203,11 @@ $ echo
 "
     .to_string();
 
-    let out = process_cleanup(&basic_md);
+    let opt = Opt {
+        cleanup_only: true,
+        ..DEFAULT_OPT
+    };
+    let out = process(&basic_md, opt);
     assert_eq!(
         out,
         "
@@ -218,12 +229,73 @@ fn test_no_space() {
 "
     .to_string();
 
-    let out = process(&basic_md);
+    let out = process(&basic_md, DEFAULT_OPT);
     assert_eq!(
         out,
         "
 ## 1. heading
 ## 2. heading
+"
+    );
+}
+
+#[test]
+fn test_start_end_depth() {
+    let basic_md = "
+## heading
+```
+# comment 1.2
+$ echo
+```
+### heading
+#### heading
+# heading
+"
+    .to_string();
+
+    let opt = Opt {
+        start_depth: 1,
+        end_depth: 4,
+        ..DEFAULT_OPT
+    };
+    let out = process(&basic_md, opt);
+    assert_eq!(
+        out,
+        "
+## 1.1. heading
+```
+# comment 1.2
+$ echo
+```
+### 1.1.1. heading
+#### heading
+# 2. heading
+"
+    );
+}
+
+#[test]
+fn test_reset() {
+    let basic_md = "
+## heading
+## heading
+# heading
+## heading
+"
+    .to_string();
+
+    let opt = Opt {
+        reset_with_higher_depth: true,
+        ..DEFAULT_OPT
+    };
+    let out = process(&basic_md, opt);
+    assert_eq!(
+        out,
+        "
+## 1. heading
+## 2. heading
+# heading
+## 1. heading
 "
     );
 }
