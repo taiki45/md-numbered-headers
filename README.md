@@ -31,9 +31,7 @@ Text.
 Another text.
 ```
 
-Spec:
-
-- Only supports header-depth=4.
+See more option with `--help`.
 
 ## Usage
 Single file:
@@ -51,4 +49,27 @@ $ for f in `git ls-files |grep .md`; do echo $f; cat $f | md-numbered-headers | 
 ### Cleanup only mode
 ```
 $ cat my-file.md | md-numbered-headers -c | tee my-file.md > /dev/null
+```
+
+### The `reset_with_higher_depth` option
+If true and the `start_depth` is default value `2`, it resets the header number counting with depth 1 header (`#`).
+
+Given:
+
+```markdown
+# Title
+## Topic a
+## Topic b
+# Another title
+## Topic c
+```
+
+Result:
+
+```markdown
+# Title
+## 1. Topic a
+## 2. Topic b
+# Another title
+## 1. Topic c
 ```
