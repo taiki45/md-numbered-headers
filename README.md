@@ -1,7 +1,7 @@
 md-numbered-headers
 ===================
 
-Addiing numbered-headers to a markdown file.
+Insert numbered-headers to a markdown file.
 
 Convert from:
 
