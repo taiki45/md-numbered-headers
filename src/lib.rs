@@ -36,9 +36,9 @@ pub fn process(content: &str, opt: Opt) -> String {
 
 fn cleanup(line: String) -> String {
     lazy_static! {
-        static ref RE: Regex = Regex::new(r"((\d+\.)+\s?)").unwrap();
+        static ref RE: Regex = Regex::new(r"(#\s*)(\d+\.)+\s?").unwrap();
     }
-    RE.replacen(&line, 1, "").to_string()
+    RE.replacen(&line, 1, "$1").to_string()
 }
 
 fn add_number_string(line: &mut String, heading_number: &mut HeadingNumber, opt: &Opt) {
