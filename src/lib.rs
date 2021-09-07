@@ -20,7 +20,7 @@ pub fn process(content: &str, opt: Opt) -> String {
         }
 
         let mut out = line.to_string();
-        if !is_code_block && out.starts_with("#") {
+        if !is_code_block && out.starts_with('#') {
             out = cleanup(out);
 
             if !opt.cleanup_only {
@@ -36,15 +36,15 @@ pub fn process(content: &str, opt: Opt) -> String {
 
 fn cleanup(line: String) -> String {
     lazy_static! {
-        static ref RE: Regex = Regex::new(r"((\d+\.)+\s?)").unwrap();
+        static ref RE: Regex = Regex::new(r"(#\s*)(\d+\.)+\s?").unwrap();
     }
-    RE.replacen(&line, 1, "").to_string()
+    RE.replacen(&line, 1, "$1").to_string()
 }
 
 fn add_number_string(line: &mut String, heading_number: &mut HeadingNumber, opt: &Opt) {
     let depth = line.chars().take_while(|&v| v == '#').count();
     // reset
-    if opt.reset_with_higher_depth == true && depth < opt.start_depth {
+    if opt.reset_with_higher_depth && depth < opt.start_depth {
         heading_number.reset_all();
     }
 

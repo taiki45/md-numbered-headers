@@ -45,17 +45,10 @@ fn validate_opt(opt: &Opt) {
 }
 
 fn convert_opt(opt: Opt) -> md_numbered_headers::Opt {
-    match opt {
-        Opt {
-            cleanup_only,
-            start_depth,
-            end_depth,
-            reset_with_higher_depth,
-        } => md_numbered_headers::Opt {
-            cleanup_only,
-            start_depth,
-            end_depth,
-            reset_with_higher_depth,
-        },
+    md_numbered_headers::Opt {
+        cleanup_only: opt.cleanup_only,
+        start_depth: opt.start_depth,
+        end_depth: opt.end_depth,
+        reset_with_higher_depth: opt.reset_with_higher_depth,
     }
 }

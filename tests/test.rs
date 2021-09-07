@@ -125,6 +125,7 @@ fn test_existing_numbers() {
 ## 1. heading
 ### 1.5. heading (1.2) test
 ## 1.3. heading
+### heading 3.2 test
 "
     .to_string();
 
@@ -135,6 +136,7 @@ fn test_existing_numbers() {
 ## 1. heading
 ### 1.1. heading (1.2) test
 ## 2. heading
+### 2.1. heading 3.2 test
 "
     );
 }
